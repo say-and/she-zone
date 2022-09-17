@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<form id="form1" name="form1" method="post" action="">
+  <table width="595" border="1">
+    <tr>
+      <th width="23" scope="row">sno</th>
+      <td width="51">doctorid</td>
+      <td width="57">hospital name</td>
+      <td width="72">doctorname</td>
+      <td width="35">photo</td>
+      <td width="68">department</td>
+      <td width="71">qualification</td>
+      <td width="41">gender</td>
+      <td width="43">experience</td>
+      <td width="59">contactno</td>
+    </tr>
+       {% for i in data %}
+    <tr>
+        <th>{{ loop.index }}</th>
+      <td>{{ i["doctorname"] }}</td>
+      <td>{{ i["gender"] }}</td>
+      <td>{{ i["contact"] }}</td>
+      <td>{{ i["Address"] }}</td>
+      <td>{{ i["department"] }}</td>
+      <td>{{ i["qualification"] }}</td>
+      <td>{{ i["experience"] }}</td>
+      <td>&nbsp;{{ i["photo"] }}</td>
+    </tr>
+      {% endfor %}
+  </table>
+</form>
+</body>
+</html>
