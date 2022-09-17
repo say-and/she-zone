@@ -91,7 +91,10 @@ def view_approved_trainer():
 
 @app.route('/view_complaints')
 def view_complaints():
-    return render_template('admin/view_complaints.html')
+    b = Db()
+    qry = "SELECT * FROM`complaint`"
+    res = b.select(qry)
+    return render_template('admin/view_complaints.html', data = res)
 
 @app.route('/view_doctor')
 def view_doctor():
