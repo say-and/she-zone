@@ -28,14 +28,14 @@
     </tr>
       { % for i in data %}
     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>&nbsp;</td>
+      <td>{{looped.indexed}}</td>
+      <td>{{ i[photo] }}</td>
+      <td>{{ i[name] }}</td>
+      <td>{{ i[gender] }}</td>
+      <td>{{ i[contact] }}</td>
+      <td>{{ i[address] }}</td>
+      <td>{{ i[department] }}</td>
+      <td>&nbsp;{{ i[qualification] }}</td>
       <td><a href="#">Edit</a></td>
       <td><a href="#">Delete</a></td>
     </tr>

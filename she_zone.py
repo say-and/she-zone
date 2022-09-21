@@ -58,6 +58,12 @@ def Hospita_lRegister_post():
     hospitaltype=request.form['textfield8']
     password=request.form['textfield9']
     confirmpassword=request.form['textfield10']
+    y=Db()
+    qry = "insert into login (username,password,usertype)values ('"+email+"','"+password+"','hospital')"
+    res=y.insert(qry)
+    qry2="insert into hospital(name,place,post,pin,district,contactno,email,hospitaltype,login_id) values('"+hospitalname+"','"+place+"','"+post+"','"+pin+"','"+district+"','"+contactno+"','"+email+"','"+hospitaltype+"','"+str(res)+"')"
+    print(qry2)
+    res = y.insert(qry2)
     return 'ok'
 @app.route('/send_reply')
 def send_reply():
