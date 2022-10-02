@@ -6,7 +6,7 @@
 </head>
 
 <body>
-<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1">
+<form action="/add_doctor_post" method="post" enctype="multipart/form-data" name="form1" id="form1">
   <table  border="1">
     <tr>
       <td>Name</th>
@@ -23,9 +23,9 @@
     </tr>
     <tr>
       <td>Gender</td>
-      <td><input type="radio" name="radio" id="radio" value="radio" />
+      <td><input type="radio" name="radio" id="radio" value="male" />
         Male
-        <input type="radio" name="radio2" id="radio2" value="radio2" />
+        <input type="radio" name="radio" id="radio2" value="female" />
         Female</td>
     </tr>
     <tr>
@@ -33,30 +33,17 @@
       <td><select name="select" id="select">
       </select></td>
     </tr>
+      <tr>
+          <td>experience</td>
+          <td><input type="text" name="experience" id="experience"/></td>
+      </tr>
     <tr>
       <td>Qualification</td>
       <td><input type="text" name="textfield4" id="textfield4" /></td>
     </tr>
     <tr>
-      <td>Place</td>
-      <td><input type="text" name="textfield5" id="textfield5" /></td>
-    </tr>
-    <tr>
-      <td>Post</td>
-      <td><input type="text" name="textfield6" id="textfield6" /></td>
-    </tr>
-    <tr>
-      <td>District</td>
-      <td><select name="select2" id="select2">
-      </select></td>
-    </tr>
-    <tr>
-      <td>Pincode</td>
-      <td><input type="text" name="textfield7" id="textfield7" /></td>
-    </tr>
-    <tr>
       <td>Photo</td>
-      <td><input type="file" name="fileField" id="fileField" /></td>
+      <td><input type="file" name="filFieled" id="fileField" /></td>
     </tr>
     <tr>
       <td colspan="2" align="center"><input type="submit" name="button" id="button" value="Save" /></td>

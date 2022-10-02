@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,session
 from DBConnection import Db
 
 app = Flask(__name__)
-
+app.secret_key="hi"
 
 @app.route('/')
 def hello_world():
@@ -12,7 +12,21 @@ def hello_world():
 def login_post():
     username=request.form['textfield']
     password=request.form['textfield2']
-    return "ok"
+    d = Db()
+    qry = "SELECT * FROM `login` WHERE `username`='"+username+"' AND `password`='"+password+"'"
+    res = d.selectOne(qry)
+    if res is not None:
+        session['lid']=res['login_id']
+        if res['usertype']=='admin':
+            return '''<script>alert('Login Success');window.location='/adm_home'</script>'''
+        elif res['usertype']=='hospital':
+            return '''<script>alert('Login Success');window.location='/hospital_home'</script>'''
+        elif res['usertype']=='doctor':
+            return '''<script>alert('Login Success');window.location='/dochome'</script>'''
+        else:
+            return '''<script>alert('Invalid User');window.location='/'</script>'''
+    else:
+        return '''<script>alert('Invalid User');window.location='/'</script>'''
 
 
 
@@ -40,7 +54,18 @@ def change_password_post():
     oldpassword=request.form['textfield']
     newpassword=request.form['textfield2']
     confirmpassword=request.form['textfield3']
-    return "ok"
+    db = Db()
+    qry = "SELECT * FROM `login` WHERE `password`='"+oldpassword+"'"
+    res = db.selectOne(qry)
+    if res is not None:
+        if newpassword==confirmpassword:
+            qry = "UPDATE login SET `password`='"+newpassword+"' WHERE `login_id`='"+str(session['lid'])+"'"
+            res = db.update(qry)
+            return '''<script>alert('Password Changed');window.location='/'</script>'''
+        else:
+            return '''<script>alert('Password Mismatch!');window.location='/change_passwrd'</script>'''
+    else:
+        return '''<script>alert('Current Password must be valid!');window.location='/change_passwrd'</script>'''
 
 
 @app.route('/Hospita_lRegister')
@@ -64,7 +89,29 @@ def Hospita_lRegister_post():
     qry2="insert into hospital(name,place,post,pin,district,contactno,email,hospitaltype,login_id) values('"+hospitalname+"','"+place+"','"+post+"','"+pin+"','"+district+"','"+contactno+"','"+email+"','"+hospitaltype+"','"+str(res)+"')"
     print(qry2)
     res = y.insert(qry2)
-    return 'ok'
+    return '''<script>alert('Added');window.location='/Hospita_lRegister'</script>'''
+
+@app.route('/view_hospital')
+def view_hospital():
+    y =Db()
+    qry = "SELECT * FROM `hospital`"
+    res =y.select(qry)
+    return render_template('admin/view_hospital.html',data=res)
+
+
+
+
+@app.route('/search_hospital', methods=['post'])
+def search_hospital():
+    db = Db()
+    search = request.form['textfield']
+    qry = "SELECT * FROM hospital WHERE `name` LIKE '%"+search+"%'"
+    res = db.select(qry)
+    print(res)
+    return view_hospital()
+
+
+
 @app.route('/send_reply')
 def send_reply():
     return render_template('admin/send_reply.html')
@@ -75,9 +122,20 @@ def send_reply_post():
 
 @app.route('/User_View')
 def User_View():
+
     d=Db()
     qry = "SELECT * FROM `user`"
     res = d.select(qry)
+    return render_template('admin/User_View.html',data=res)
+
+
+@app.route('/User_View_post', methods=['post'])
+def search_User():
+    db = Db()
+    search = request.form['textfield']
+    qry = "SELECT * FROM user WHERE name LIKE '"+search+"'"
+    res = db.select(qry)
+    print(res)
     return render_template('admin/User_View.html',data=res)
 
 @app.route('/view_and_aprv_trainer')
@@ -109,20 +167,43 @@ def view_doctor():
     res =u.select(qry)
     return render_template('admin/view_doctor.html',data=res)
 
-@app.route('/view_hospital')
-def view_hospital():
-    y =Db()
-    qry = "SELECT * FROM `hospital`"
-    res =y.select(qry)
-    return render_template('admin/view_hospital.html',data=res)
-
 @app.route('/add_doctor')
 def add_doctor():
     return render_template('hospital/add_doctor.html')
+@app.route('/add_doctor_post',methods=['post'])
+def add_doctor_post():
+    Name=request.form['textfield']
+    Email=request.form['textfield2']
+    phone=request.form['textfield3']
+    gender=request.form['radio']
+    # department=request.form['select']
+    qualification=request.form['textfield4']
+    photo=request.files['filFieled']
+    photo.save("C:\\Users\\user\\PycharmProjects\\she_zone\\static"+photo.filename)
+    fil= "\static" +photo.filename
+    exp=request.form['experience']
+
+    x = Db()
+    qry = "insert into login (username,password,usertype)values ('"+Email+"','"+phone+"','doctor')"
+    res =x.insert(qry)
+    qry1 ="insert into doctor(hospitalid,doctorname,contactno,gender,qualification,experience,photo,login_id)values('"+str(session['lid'])+"','"+Name+"','"+phone+"','"+gender+"','"+qualification+"','"+exp+"','"+fil+"','"+str(res)+"')"
+    res1 = x.insert(qry1)
+    return '''<script>alert('Addedd');window.location='/add_Dcotor'</script>'''
+
 
 @app.route('/add_schedule')
 def add_schedule():
     return render_template('hospital/add_schedule.html')
+@app.route('/add_schedule_post',methods=['post'])
+def add_schedule_post():
+    doctor=request.form['select']
+    day=request.form['select2']
+    timefrom=request.form['textfield']
+    timeto=request.form['textfield2']
+
+    a = Db()
+    # qry = "insert into schedule(date,fromtime,totime,status)values('"++"','"++"')
+    return 'ok'
 
 @app.route('/change_password')
 def change_password():
